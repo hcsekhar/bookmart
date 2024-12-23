@@ -1,0 +1,25 @@
+{% extends 'base.html'  %}
+
+{% block content %}
+
+<h2>My Products {{ no_of_product }}</h2>
+{% if products %}
+{% for product in products %}
+
+<div class="card" style="width: 18rem;">
+    <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+    <div class="card-body">
+        <a href="{% url 'productDetail' product.pk %}"><h5 class="card-title">{{ product.name }}</h5></a>
+        <h4 class="card-sub-title">{{ product.price }} ₹</h4>
+        <p class="card-text">{{ product.created_at }}</p>
+        <p>{{ product.description }}</p>
+        <a href="{% url 'productDetail' product.pk %}" class="btn btn-primary">More</a>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<p>No Products Are Available in the DataBase</p>
+{% endif %}
+
+
+{% endblock %}

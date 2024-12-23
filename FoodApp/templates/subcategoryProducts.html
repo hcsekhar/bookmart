@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if sub_category %}
+<div class="container">
+    <h2>{{ sub_category.0.sub_categories }}</h2>
+    <div class="row justify-content-center">
+        {% for product in sub_category %}
+        <div class="col-3 mb-3">
+            <div class="card m-2" style="width: 100%;">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="Product Image" style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                    <a href="{% url 'productDetail' product.pk %}" style="text-decoration:none;">
+                        <h5 class="card-title m-1">{{ product.item_name }}</h5>
+                    </a>
+                    <h4 class="card-subtitle m-1">{{ product.price }}</h4>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<p>*** NO PRODUCTS ***</p>
+{% endif %}
+
+{% endblock %}

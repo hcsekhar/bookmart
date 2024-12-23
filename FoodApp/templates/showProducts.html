@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div align="center">
+    <h2>FOOD ITEMS</h2>
+</div>
+
+<div class="carousel slide" id="carouselExampleCaptions">
+    <div class="carousel-indicators">
+        <button aria-current="true" aria-label="Slide 1" class="active" data-bs-slide-to="0"
+                data-bs-target="#carouselExampleCaptions" type="button"></button>
+        <button aria-label="Slide 2" data-bs-slide-to="1" data-bs-target="#carouselExampleCaptions"
+                type="button"></button>
+        <button aria-label="Slide 3" data-bs-slide-to="2" data-bs-target="#carouselExampleCaptions"
+                type="button"></button>
+    </div>
+
+    <div class="carousel-inner">
+        {% for banner in banner %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img alt="banner" class="d-block w-100" src="{{ banner.banner_img.url }}">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ banner.title }}</h5>
+                <p>{{ banner.short_discp }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleCaptions" type="button">
+        <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleCaptions" type="button">
+        <span aria-hidden="true" class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!----------------------------------------------------------------- -->
+<div class="container marketing">
+    <div class="row d-flex justify-content-center flex-wrap">
+        {% for sc in sub_category %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6 mt-5 text-center">
+            <div class="image-container"
+                 style="position: relative; display: flex; flex-direction: column; align-items: center;">
+                <a href="{% url 'subcategoryProducts' sc.pk %}"><img class="bd-placeholder-img rounded-circle"
+                                                                     width="140" height="140"
+                                                                     src="{{ sc.sub_category_image.url }}"></a>
+                <a name="subcategory" href="{% url 'showproducts' %}?subcategory={{ sc.sub_category_name }}"
+                   class="overlay-button"
+                   style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: white; font-size: 14px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); background-color: rgba(0, 0, 0, 0.5); padding: 2px 6px; border-radius: 5px; text-decoration: none;">
+                </a>
+            </div>
+            <div class="mt-2 d-flex justify-content-center align-items-center">
+                {% if sc.main_category.category_name == "VEG" %}
+                <span style="display: inline-block; width: 10px; height: 10px; background-color: green; border-radius: 50%; margin-right: 5px;"></span>
+                {% else %}
+                <span style="display: inline-block; width: 10px; height: 10px; background-color: red; border-radius: 50%; margin-right: 5px;"></span>
+                {% endif %}
+                <h6 class="fw-normal">{{ sc.sub_category_name }}</h6>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<br><br>
+<!----------------------------------------------------------------- -->
+
+{% if foods1 %}
+<div class="container">
+    <div class="row justify-content-center">
+        {% for product in foods1 %}
+        <div class="col-3">
+            <div class="card m-2" style="width: 100%;">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <a href="{% url 'productDetail' product.pk %}" style="text-decoration:none;">
+                        <h5 class="card-title m-1">{{ product.item_name }}</h5>
+                    </a>
+                    <h4 class="card-subtitle m-1">{{ product.price }}</h4>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<p>*** NO PRODUCTS ***</p>
+{% endif %}
+
+<div class="row m-5" >
+    <div class="col-md-12 m-3">
+        {% if foods1.has_other_pages %}
+        <ul class="pagination justify-content-center ">
+
+            <!-- Previous page condition -->
+            {% if foods1.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ foods1.previous_page_number }}">Previous</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+
+            <!-- No. of pages to loop -->
+            {% for i in foods1.paginator.page_range %}
+            {% if foods1.number == i %}
+            <li class="page-item active" aria-current="page"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            <!-- Next page condition -->
+            {% if foods1.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ foods1.next_page_number }}">Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
